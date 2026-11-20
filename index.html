@@ -12,24 +12,38 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
 <style>
+/* فۆنتی Vazirmatn: ئەگەر فایلی fonts/Vazirmatn-Variable.woff2 دانرابێت بێ ئینتەرنێتیش کار دەکات */
+@font-face{font-family:'VazirLocal';src:url('fonts/Vazirmatn-Variable.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
 :root{--bg:#ebebeb;--fg:#222;--mute:#8a8a8a;--line:#d6d6d6;--card:#e0e0e0;--accent:#222}
 [data-theme=dark]{--bg:#222;--fg:#f2f2f2;--mute:#8b8b8b;--line:#3a3a3a;--card:#2e2e2e;--accent:#f2f2f2}
+/* ڕەنگی وەرزەکان */
+[data-pal=spring]{--bg:#e9f0e4;--fg:#1f2d1c;--mute:#7f8f7a;--line:#d0dccb;--card:#dde8d6;--accent:#3f8f3a}
+[data-pal=spring][data-theme=dark]{--bg:#1b241a;--fg:#eaf3e6;--mute:#8a9b86;--line:#2f3d2d;--card:#25301f;--accent:#7cc66f}
+[data-pal=summer]{--bg:#f6ecd8;--fg:#2b2112;--mute:#9a8a6c;--line:#e4d5b6;--card:#eddfc2;--accent:#e08a00}
+[data-pal=summer][data-theme=dark]{--bg:#261f12;--fg:#f6ecd8;--mute:#a09070;--line:#3d3320;--card:#31291a;--accent:#ffb02e}
+[data-pal=autumn]{--bg:#f0e3d8;--fg:#2c1d14;--mute:#988070;--line:#dcc8b8;--card:#e6d3c4;--accent:#c4511a}
+[data-pal=autumn][data-theme=dark]{--bg:#251a14;--fg:#f2e4d9;--mute:#9e8878;--line:#3c2b21;--card:#30221b;--accent:#f08a4b}
+[data-pal=winter]{--bg:#e6edf3;--fg:#17222c;--mute:#7b8b99;--line:#cfdbe5;--card:#d9e4ed;--accent:#2d6fa8}
+[data-pal=winter][data-theme=dark]{--bg:#161e26;--fg:#e8f0f6;--mute:#8497a6;--line:#2a3744;--card:#212c37;--accent:#6bb2ea}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--fg);font-family:'Vazirmatn',system-ui,-apple-system,sans-serif;transition:background .3s,color .3s}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:'VazirLocal','Vazirmatn',system-ui,-apple-system,'Segoe UI',sans-serif;transition:background .3s,color .3s}
+button,input{font-family:inherit}
 .app{max-width:480px;margin:0 auto;min-height:100dvh;padding:calc(env(safe-area-inset-top) + 22px) 26px calc(env(safe-area-inset-bottom) + 26px);display:flex;flex-direction:column;transition:opacity .25s}
 .app.loading{opacity:.35}
 header{display:flex;justify-content:space-between;align-items:flex-start}
 h1{font-size:1.2rem;font-weight:700;margin:0;line-height:1.4}
 .date{color:var(--mute);font-size:.82rem}
-.actions{display:flex;gap:2px;margin-inline-end:-8px}
-button{font-family:inherit}
+.actions{display:flex;gap:0;margin-inline-end:-8px}
 button.icon{background:none;border:0;color:var(--fg);padding:8px;border-radius:50%;cursor:pointer;display:grid;place-items:center}
 button.icon svg{width:24px;height:24px}
-.temp{direction:ltr;text-align:right;font-size:min(36vw,10.5rem);font-weight:800;line-height:1.05;letter-spacing:-.05em;margin:22px 0 0;color:var(--accent);transition:color .3s}
+/* پلەی گەرما لە ناوەڕاست */
+.temp{direction:ltr;text-align:center;font-size:min(36vw,10.5rem);font-weight:800;line-height:1.05;letter-spacing:-.05em;margin:30px 0 0;color:var(--accent);transition:color .3s}
 .temp .deg{font-weight:800}
-.cond{color:var(--mute);font-size:.95rem;margin:2px 0 0}
+.cond{text-align:center;color:var(--mute);font-size:.95rem;margin:4px 0 0}
 .cond b{color:var(--fg);font-weight:600}
 .hours{display:flex;gap:16px;overflow-x:auto;padding:26px 0 8px;scrollbar-width:none;margin-top:6px}
 .hours::-webkit-scrollbar{display:none}
@@ -42,9 +56,10 @@ button.icon svg{width:24px;height:24px}
 .grid .v{font-size:1.05rem;font-weight:600;margin-top:2px}
 .grid .v small{display:block;font-size:.7rem;color:var(--mute);font-weight:400}
 .ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
-.days{display:flex;justify-content:space-between;gap:10px;margin-top:auto;padding-top:34px;overflow-x:auto;scrollbar-width:none}
+.days{display:flex;gap:20px;margin-top:auto;padding-top:34px;overflow-x:auto;scrollbar-width:none}
 .days::-webkit-scrollbar{display:none}
 .d{flex:0 0 auto;font-size:.68rem;text-align:center}
+.d .w{color:var(--fg);font-weight:600;font-size:.74rem;margin-bottom:2px;white-space:nowrap}
 .d .t{color:var(--mute);white-space:nowrap}
 .d b{display:block;font-weight:700;font-size:.78rem;margin-top:3px;direction:ltr}
 .err{margin-top:16px;padding:12px 14px;border-radius:12px;background:var(--card);font-size:.85rem}
@@ -54,31 +69,18 @@ button.icon svg{width:24px;height:24px}
 .srow{display:flex;gap:8px;align-items:center}
 .srow input{flex:1;min-width:0;font:inherit;font-size:1rem;color:var(--fg);background:var(--card);border:0;border-radius:14px;padding:13px 16px;outline:none}
 .srow input::placeholder{color:var(--mute)}
+.st{flex:1;margin:0;font-size:1.1rem;font-weight:700}
 .res{margin-top:10px}
-.item{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:right;background:none;border:0;border-bottom:1px solid var(--line);color:var(--fg);padding:13px 2px;font-size:.98rem;cursor:pointer}
+.item{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:start;background:none;border:0;border-bottom:1px solid var(--line);color:var(--fg);padding:13px 2px;font-size:.98rem;cursor:pointer}
 .item small{color:var(--mute);font-size:.75rem}
 .gt{margin:26px 0 10px;font-size:.78rem;color:var(--mute)}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips,.opts{display:flex;flex-wrap:wrap;gap:8px}
 .chip{background:var(--card);color:var(--fg);border:0;border-radius:999px;padding:8px 15px;font-size:.88rem;cursor:pointer}
-.chip:active,.item:active{opacity:.6}
-.empty{color:var(--mute);font-size:.85rem;padding:14px 2px}
-
-/* ڕەنگی وەرزەکان */
-[data-pal=spring]{--bg:#e9f0e4;--fg:#1f2d1c;--mute:#7f8f7a;--line:#d0dccb;--card:#dde8d6;--accent:#3f8f3a}
-[data-pal=spring][data-theme=dark]{--bg:#1b241a;--fg:#eaf3e6;--mute:#8a9b86;--line:#2f3d2d;--card:#25301f;--accent:#7cc66f}
-[data-pal=summer]{--bg:#f6ecd8;--fg:#2b2112;--mute:#9a8a6c;--line:#e4d5b6;--card:#eddfc2;--accent:#e08a00}
-[data-pal=summer][data-theme=dark]{--bg:#261f12;--fg:#f6ecd8;--mute:#a09070;--line:#3d3320;--card:#31291a;--accent:#ffb02e}
-[data-pal=autumn]{--bg:#f0e3d8;--fg:#2c1d14;--mute:#988070;--line:#dcc8b8;--card:#e6d3c4;--accent:#c4511a}
-[data-pal=autumn][data-theme=dark]{--bg:#251a14;--fg:#f2e4d9;--mute:#9e8878;--line:#3c2b21;--card:#30221b;--accent:#f08a4b}
-[data-pal=winter]{--bg:#e6edf3;--fg:#17222c;--mute:#7b8b99;--line:#cfdbe5;--card:#d9e4ed;--accent:#2d6fa8}
-[data-pal=winter][data-theme=dark]{--bg:#161e26;--fg:#e8f0f6;--mute:#8497a6;--line:#2a3744;--card:#212c37;--accent:#6bb2ea}
-.d .w{color:var(--fg);font-weight:600;font-size:.74rem;margin-bottom:2px;white-space:nowrap}
-.days{gap:20px}
-.st{flex:1;margin:0;font-size:1.1rem;font-weight:700}
-.opts{display:flex;flex-wrap:wrap;gap:8px}
-.opt{display:inline-flex;align-items:center;gap:8px;background:var(--card);color:var(--fg);border:1.5px solid transparent;border-radius:999px;padding:9px 16px;font:inherit;font-size:.9rem;cursor:pointer;transition:border-color .2s}
+.opt{display:inline-flex;align-items:center;gap:8px;background:var(--card);color:var(--fg);border:1.5px solid transparent;border-radius:999px;padding:9px 16px;font-size:.9rem;cursor:pointer;transition:border-color .2s}
 .opt.on{border-color:var(--accent)}
 .opt i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.chip:active,.item:active,.opt:active{opacity:.6}
+.empty{color:var(--mute);font-size:.85rem;padding:14px 2px}
 </style>
 </head>
 <body>
@@ -89,94 +91,176 @@ button.icon svg{width:24px;height:24px}
       <div class="date" id="date">&nbsp;</div>
     </div>
     <div class="actions">
-      <button class="icon" id="btnSearch" aria-label="گەڕان"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button>
-      <button class="icon" id="btnSettings" aria-label="ڕێکخستنەکان"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
-      <button class="icon" id="btnTheme" aria-label="ڕووکار"></button>
+      <button class="icon" id="btnSearch" data-ia="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button>
+      <button class="icon" id="btnSettings" data-ia="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      <button class="icon" id="btnTheme"></button>
     </div>
   </header>
 
   <div class="temp" id="temp">—</div>
   <div class="cond" id="cond">&nbsp;</div>
-  <div class="err" id="err" hidden>پەیوەندی بە ئینتەرنێتەوە نییە، دووبارە هەوڵ بدەرەوە.</div>
+  <div class="err" id="err" data-i="err" hidden></div>
 
   <div class="hours" id="hours"></div>
 
   <div class="grid">
-    <div><div class="l">هەڵهاتنی خۆر</div><div class="v" id="sunrise">—</div></div>
-    <div><div class="l">ئاوابوونی خۆر</div><div class="v" id="sunset">—</div></div>
-    <div><div class="l">هەستپێکراو</div><div class="v" id="feels">—</div></div>
-    <div><div class="l">با</div><div class="v" id="wind">—</div></div>
-    <div><div class="l">شێداری</div><div class="v" id="hum">—</div></div>
-    <div><div class="l">پەستانی هەوا</div><div class="v" id="pres">—</div></div>
-    <div><div class="l">ڕوونی دیمەن</div><div class="v" id="vis">—</div></div>
-    <div><div class="l">تیشکی UV</div><div class="v" id="uv">—</div></div>
+    <div><div class="l" data-i="sunrise"></div><div class="v" id="sunrise">—</div></div>
+    <div><div class="l" data-i="sunset"></div><div class="v" id="sunset">—</div></div>
+    <div><div class="l" data-i="feels"></div><div class="v" id="feels">—</div></div>
+    <div><div class="l" data-i="wind"></div><div class="v" id="wind">—</div></div>
+    <div><div class="l" data-i="hum"></div><div class="v" id="hum">—</div></div>
+    <div><div class="l" data-i="pres"></div><div class="v" id="pres">—</div></div>
+    <div><div class="l" data-i="vis"></div><div class="v" id="vis">—</div></div>
+    <div><div class="l" data-i="uv"></div><div class="v" id="uv">—</div></div>
   </div>
 
   <div class="days" id="days"></div>
 </div>
 
+<!-- گەڕان -->
 <div class="sheet" id="sheet" aria-hidden="true">
   <div class="in">
     <div class="srow">
-      <input id="q" type="search" placeholder="گەڕان بەدوای شار…" autocomplete="off" enterkeyhint="search">
-      <button class="icon" id="btnLoc" aria-label="شوێنی من"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/><circle cx="12" cy="12" r="7.5"/></svg></button>
-      <button class="icon" id="btnClose" aria-label="داخستن"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <input id="q" type="search" data-ip="searchPh" autocomplete="off" enterkeyhint="search">
+      <button class="icon" id="btnLoc" data-ia="myLoc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/><circle cx="12" cy="12" r="7.5"/></svg></button>
+      <button class="icon" id="btnClose" data-ia="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <div class="res" id="res"></div>
     <div id="groups"></div>
   </div>
 </div>
 
+<!-- ڕێکخستنەکان -->
 <div class="sheet" id="settings" aria-hidden="true">
   <div class="in">
     <div class="srow">
-      <h2 class="st">ڕێکخستنەکان</h2>
-      <button class="icon" id="btnCloseSet" aria-label="داخستن"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <h2 class="st" data-i="settings"></h2>
+      <button class="icon" id="btnCloseSet" data-ia="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
-    <div class="gt">ڕووکار</div>
+    <div class="gt" data-i="lang"></div>
+    <div class="opts" id="setLang"></div>
+    <div class="gt" data-i="look"></div>
     <div class="opts" id="setMode"></div>
-    <div class="gt">ڕەنگی وەرزەکان</div>
+    <div class="gt" data-i="pal"></div>
     <div class="opts" id="setPal"></div>
-    <div class="gt">ساڵنامە</div>
+    <div class="gt" data-i="cal"></div>
     <div class="opts" id="setCal"></div>
   </div>
 </div>
 
 <script>
 const $=s=>document.querySelector(s);
-const KD='۰۱۲۳۴۵۶۷۸۹';
-const fd=s=>String(s).replace(/\d/g,d=>KD[d]);
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ================= زمانەکان ================= */
+const PERSIAN_DIGITS='۰۱۲۳۴۵۶۷۸۹',ARABIC_DIGITS='٠١٢٣٤٥٦٧٨٩';
+const SOLAR_KU=['خاکەلێوە','گوڵان','جۆزەردان','پووشپەڕ','خەرمانان','گەلاوێژ','ڕەزبەر','گەڵاڕێزان','سەرماوەز','بەفرانبار','ڕێبەندان','ڕەشەمە'];
+const LANGS={
+ku:{code:'ckb',dir:'rtl',name:'کوردی (سۆرانی)',digits:PERSIAN_DIGITS,pct:'٪',cal:'solar',
+ ui:{title:'کەشوهەوا — کوردستان',searchPh:'گەڕان بەدوای شار…',search:'گەڕان',now:'ئێستا',sunrise:'هەڵهاتنی خۆر',sunset:'ئاوابوونی خۆر',feels:'هەستپێکراو',wind:'با',hum:'شێداری',pres:'پەستانی هەوا',vis:'ڕوونی دیمەن',uv:'تیشکی UV',settings:'ڕێکخستنەکان',lang:'زمان',look:'ڕووکار',light:'ڕووناک',dark:'تاریک',pal:'ڕەنگی وەرزەکان',cal:'ساڵنامە',err:'پەیوەندی بە ئینتەرنێتەوە نییە، دووبارە هەوڵ بدەرەوە.',noRes:'هیچ شارێک نەدۆزرایەوە',noGeo:'ئامێرەکەت پشتگیری شوێن ناکات.',denied:'ڕێگەپێدان بە شوێن نەدرا.',myLoc:'شوێنی من',close:'داخستن'},
+ pals:{auto:'خۆکار (بەپێی وەرز)',plain:'سادە',spring:'بەهار',summer:'هاوین',autumn:'پاییز',winter:'زستان'},
+ cals:{solar:'هەتاوی',greg:'زایینی',hijri:'کۆچی مانگی'},
+ months:{solar:SOLAR_KU,greg:['کانوونی دووەم','شوبات','ئازار','نیسان','ئایار','حوزەیران','تەممووز','ئاب','ئەیلوول','تشرینی یەکەم','تشرینی دووەم','کانوونی یەکەم'],hijri:['موحەڕەم','سەفەر','ڕەبیعی یەکەم','ڕەبیعی دووەم','جومادای یەکەم','جومادای دووەم','ڕەجەب','شەعبان','ڕەمەزان','شەووال','زولقەعدە','زولحیجە']},
+ days:['یەکشەممە','دووشەممە','سێشەممە','چوارشەممە','پێنجشەممە','هەینی','شەممە'],
+ dirs:['باکوور','باکووری ڕۆژهەڵات','ڕۆژهەڵات','باشووری ڕۆژهەڵات','باشوور','باشووری ڕۆژئاوا','ڕۆژئاوا','باکووری ڕۆژئاوا'],
+ cond:{clear:'ئاسمان ساف',partly:'کەمێک هەور',cloud:'هەوراوی',fog:'تەمومژاوی',rain:'بارانی',snow:'بەفراوی',storm:'هەورەتریشقە'},
+ uvl:['کەم','مامناوەند','بەرز','زۆر بەرز','ڕادەبەدەر'],
+ groups:{ir:['ڕۆژهەڵاتی کوردستان','ئێران'],iq:['باشووری کوردستان','عێراق'],tr:['باکووری کوردستان','تورکیا'],sy:['ڕۆژئاوای کوردستان','سووریا']}},
+fa:{code:'fa',dir:'rtl',name:'فارسی',digits:PERSIAN_DIGITS,pct:'٪',cal:'solar',
+ ui:{title:'آب‌وهوا — کردستان',searchPh:'جستجوی شهر…',search:'جستجو',now:'اکنون',sunrise:'طلوع خورشید',sunset:'غروب خورشید',feels:'دمای احساس‌شده',wind:'باد',hum:'رطوبت',pres:'فشار هوا',vis:'دید افقی',uv:'شاخص UV',settings:'تنظیمات',lang:'زبان',look:'نمای برنامه',light:'روشن',dark:'تیره',pal:'رنگ فصل‌ها',cal:'تقویم',err:'اتصال به اینترنت برقرار نیست؛ دوباره تلاش کنید.',noRes:'شهری پیدا نشد',noGeo:'دستگاه شما از موقعیت‌یابی پشتیبانی نمی‌کند.',denied:'اجازهٔ دسترسی به موقعیت داده نشد.',myLoc:'موقعیت من',close:'بستن'},
+ pals:{auto:'خودکار (بر اساس فصل)',plain:'ساده',spring:'بهار',summer:'تابستان',autumn:'پاییز',winter:'زمستان'},
+ cals:{solar:'خورشیدی (جلالی)',greg:'میلادی',hijri:'قمری (هجری)'},
+ months:{solar:['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'],greg:['ژانویه','فوریه','مارس','آوریل','مه','ژوئن','ژوئیه','اوت','سپتامبر','اکتبر','نوامبر','دسامبر'],hijri:['محرم','صفر','ربیع‌الاول','ربیع‌الثانی','جمادی‌الاول','جمادی‌الثانی','رجب','شعبان','رمضان','شوال','ذی‌القعده','ذی‌الحجه']},
+ days:['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'],
+ dirs:['شمال','شمال‌شرقی','شرق','جنوب‌شرقی','جنوب','جنوب‌غربی','غرب','شمال‌غربی'],
+ cond:{clear:'آسمان صاف',partly:'کمی ابری',cloud:'ابری',fog:'مه‌آلود',rain:'بارانی',snow:'برفی',storm:'رعدوبرق'},
+ uvl:['کم','متوسط','زیاد','خیلی زیاد','بسیار شدید'],
+ groups:{ir:['شرق کردستان','ایران'],iq:['جنوب کردستان','عراق'],tr:['شمال کردستان','ترکیه'],sy:['غرب کردستان','سوریه']}},
+ar:{code:'ar',dir:'rtl',name:'العربية',digits:ARABIC_DIGITS,pct:'٪',cal:'greg',
+ ui:{title:'الطقس — كردستان',searchPh:'ابحث عن مدينة…',search:'بحث',now:'الآن',sunrise:'شروق الشمس',sunset:'غروب الشمس',feels:'الإحساس',wind:'الرياح',hum:'الرطوبة',pres:'الضغط الجوي',vis:'مدى الرؤية',uv:'الأشعة فوق البنفسجية',settings:'الإعدادات',lang:'اللغة',look:'المظهر',light:'فاتح',dark:'داكن',pal:'ألوان الفصول',cal:'التقويم',err:'لا يوجد اتصال بالإنترنت، حاول مرة أخرى.',noRes:'لم يتم العثور على مدينة',noGeo:'جهازك لا يدعم تحديد الموقع.',denied:'لم يتم السماح بالوصول إلى الموقع.',myLoc:'موقعي',close:'إغلاق'},
+ pals:{auto:'تلقائي (حسب الفصل)',plain:'عادي',spring:'الربيع',summer:'الصيف',autumn:'الخريف',winter:'الشتاء'},
+ cals:{solar:'الهجري الشمسي',greg:'الميلادي',hijri:'الهجري القمري'},
+ months:{solar:['فروردين','أرديبهشت','خرداد','تير','مرداد','شهريور','مهر','آبان','آذر','دي','بهمن','إسفند'],greg:['كانون الثاني','شباط','آذار','نيسان','أيار','حزيران','تموز','آب','أيلول','تشرين الأول','تشرين الثاني','كانون الأول'],hijri:['محرم','صفر','ربيع الأول','ربيع الآخر','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة']},
+ days:['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'],
+ dirs:['شمال','شمال شرق','شرق','جنوب شرق','جنوب','جنوب غرب','غرب','شمال غرب'],
+ cond:{clear:'سماء صافية',partly:'غائم جزئياً',cloud:'غائم',fog:'ضباب',rain:'ماطر',snow:'ثلجي',storm:'عاصفة رعدية'},
+ uvl:['منخفض','متوسط','مرتفع','مرتفع جداً','شديد'],
+ groups:{ir:['شرق كردستان','إيران'],iq:['جنوب كردستان','العراق'],tr:['شمال كردستان','تركيا'],sy:['غرب كردستان','سوريا']}},
+en:{code:'en',dir:'ltr',name:'English',digits:null,pct:'%',cal:'greg',
+ ui:{title:'Weather — Kurdistan',searchPh:'Search for a city…',search:'Search',now:'Now',sunrise:'Sunrise',sunset:'Sunset',feels:'Feels like',wind:'Wind',hum:'Humidity',pres:'Pressure',vis:'Visibility',uv:'UV index',settings:'Settings',lang:'Language',look:'Appearance',light:'Light',dark:'Dark',pal:'Season colors',cal:'Calendar',err:'No internet connection. Please try again.',noRes:'No city found',noGeo:'Your device does not support location.',denied:'Location permission was denied.',myLoc:'My location',close:'Close'},
+ pals:{auto:'Auto (by season)',plain:'Plain',spring:'Spring',summer:'Summer',autumn:'Autumn',winter:'Winter'},
+ cals:{solar:'Solar Hijri',greg:'Gregorian',hijri:'Lunar Hijri'},
+ months:{solar:['Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar','Mehr','Aban','Azar','Dey','Bahman','Esfand'],greg:['January','February','March','April','May','June','July','August','September','October','November','December'],hijri:['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Awwal','Jumada al-Thani','Rajab','Shaban','Ramadan','Shawwal','Dhu al-Qadah','Dhu al-Hijjah']},
+ days:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+ dirs:['N','NE','E','SE','S','SW','W','NW'],
+ cond:{clear:'Clear',partly:'Partly cloudy',cloud:'Cloudy',fog:'Foggy',rain:'Rainy',snow:'Snowy',storm:'Thunderstorm'},
+ uvl:['Low','Moderate','High','Very high','Extreme'],
+ groups:{ir:['East Kurdistan','Iran'],iq:['South Kurdistan','Iraq'],tr:['North Kurdistan','Turkey'],sy:['West Kurdistan','Syria']}}
+};
+const GROUP_ORDER=['ir','iq','tr','sy'];
+const CC={IR:'ir',IQ:'iq',SY:'sy',TR:'tr'};
+
+/* ================= شارەکان ================= */
+const P=(n,en,lat,lon,g)=>({n,en,lat,lon,g});
+const PRESETS=[
+  P('سنە','Sanandaj',35.3219,46.9862,'ir'),P('مەهاباد','Mahabad',36.7631,45.7222,'ir'),P('کرماشان','Kermanshah',34.3142,47.065,'ir'),
+  P('ئیلام','Ilam',33.6374,46.4227,'ir'),P('ورمێ','Urmia',37.5527,45.0761,'ir'),P('بانە','Baneh',35.9975,45.8853,'ir'),
+  P('سەقز','Saqqez',36.2493,46.2735,'ir'),P('مەریوان','Marivan',35.5219,46.176,'ir'),P('بۆکان','Bukan',36.5213,46.2088,'ir'),
+  P('پیرانشار','Piranshahr',36.7,45.1426,'ir'),P('ڕەوانسەر','Ravansar',34.7126,46.6528,'ir'),P('سەردەشت','Sardasht',36.1552,45.4784,'ir'),
+  P('پاوە','Paveh',35.0432,46.3569,'ir'),P('کامیاران','Kamyaran',34.7956,46.9355,'ir'),P('دیواندەرە','Divandarreh',35.9139,47.0267,'ir'),
+  P('ئوشنەویە','Oshnavieh',37.0397,45.0978,'ir'),P('نەغەدە','Naqadeh',36.9553,45.388,'ir'),
+  P('هەولێر','Erbil',36.1901,44.0091,'iq'),P('سلێمانی','Sulaymaniyah',35.5558,45.4351,'iq'),P('دهۆک','Duhok',36.867,42.988,'iq'),
+  P('کەرکووک','Kirkuk',35.4681,44.3922,'iq'),P('هەڵەبجە','Halabja',35.1778,45.9861,'iq'),P('زاخۆ','Zakho',37.1439,42.6872,'iq'),
+  P('ڕانیە','Ranya',36.2562,44.8836,'iq'),P('کەلار','Kalar',34.6277,45.3189,'iq'),P('ئامێدی','Amedi',37.0914,43.4872,'iq'),
+  P('ڕەواندز','Rawanduz',36.6119,44.5236,'iq'),P('کۆیە','Koya',36.0827,44.6277,'iq'),P('چەمچەماڵ','Chamchamal',35.5298,44.8283,'iq'),
+  P('خانەقین','Khanaqin',34.3453,45.3869,'iq'),P('شەنگال','Sinjar',36.3209,41.8761,'iq'),
+  P('ئامەد','Diyarbakir',37.9144,40.2306,'tr'),P('وان','Van',38.4891,43.4089,'tr'),P('ماردین','Mardin',37.3212,40.7245,'tr'),
+  P('بەتمان','Batman',37.8812,41.1351,'tr'),P('حەکاری','Hakkari',37.5744,43.7408,'tr'),P('شرناخ','Sirnak',37.5164,42.4611,'tr'),
+  P('ئورفا','Sanliurfa',37.1591,38.7969,'tr'),P('بەدلیس','Bitlis',38.4006,42.1095,'tr'),P('دێرسم','Tunceli',39.1079,39.5401,'tr'),
+  P('مووش','Mus',38.7432,41.5064,'tr'),P('ئاگری','Agri',39.7191,43.0503,'tr'),P('سێئرت','Siirt',37.9333,41.95,'tr'),
+  P('چەولیگ','Bingol',38.8854,40.498,'tr'),P('خارپێت','Elazig',38.681,39.2264,'tr'),
+  P('قامیشلۆ','Qamishli',37.0522,41.2314,'sy'),P('کۆبانێ','Kobani',36.89,38.352,'sy'),P('عەفرین','Afrin',36.5119,36.8686,'sy'),
+  P('حەسەکە','Hasakah',36.5024,40.7477,'sy'),P('دێرک','Derik',37.3547,42.1989,'sy'),P('سەرێکانی','Ras al-Ayn',36.85,40.07,'sy'),
+  P('عامودا','Amuda',37.1058,40.9356,'sy'),P('تەل‌ئەبیەد','Tal Abyad',36.6967,38.9546,'sy')
+];
+// ناوی شارەکان بە فارسی و عەرەبی: [فارسی, عەرەبی]
+const NAMES={
+ Sanandaj:['سنندج','سنندج'],Mahabad:['مهاباد','مهاباد'],Kermanshah:['کرمانشاه','كرمانشاه'],Ilam:['ایلام','إيلام'],Urmia:['ارومیه','أرومية'],
+ Baneh:['بانه','بانه'],Saqqez:['سقز','سقز'],Marivan:['مریوان','مريوان'],Bukan:['بوکان','بوكان'],Piranshahr:['پیرانشهر','بيرانشهر'],
+ Ravansar:['روانسر','روانسر'],Sardasht:['سردشت','سردشت'],Paveh:['پاوه','پاوه'],Kamyaran:['کامیاران','كامياران'],Divandarreh:['دیواندره','ديواندرة'],
+ Oshnavieh:['اشنویه','أشنويه'],Naqadeh:['نقده','نقدة'],
+ Erbil:['اربیل','أربيل'],Sulaymaniyah:['سلیمانیه','السليمانية'],Duhok:['دهوک','دهوك'],Kirkuk:['کرکوک','كركوك'],Halabja:['حلبچه','حلبجة'],
+ Zakho:['زاخو','زاخو'],Ranya:['رانیه','رانية'],Kalar:['کلار','كلار'],Amedi:['عمادیه','العمادية'],Rawanduz:['رواندز','رواندوز'],
+ Koya:['کویه','كويسنجق'],Chamchamal:['چمچمال','جمجمال'],Khanaqin:['خانقین','خانقين'],Sinjar:['سنجار','سنجار'],
+ Diyarbakir:['دیاربکر','ديار بكر'],Van:['وان','وان'],Mardin:['ماردین','ماردين'],Batman:['باتمان','باتمان'],Hakkari:['هکاری','حكاري'],
+ Sirnak:['شیرناک','شرناق'],Sanliurfa:['اورفا','أورفة'],Bitlis:['بیتلیس','بتليس'],Tunceli:['تونجلی','تونجلي'],Mus:['موش','موش'],
+ Agri:['آغری','آغري'],Siirt:['سعرد','سعرد'],Bingol:['بینگل','بينغول'],Elazig:['الازیغ','ألازيغ'],
+ Qamishli:['قامشلی','القامشلي'],Kobani:['کوبانی','كوباني'],Afrin:['عفرین','عفرين'],Hasakah:['حسکه','الحسكة'],Derik:['دیریک','المالكية'],
+ 'Ras al-Ayn':['رأس‌العین','رأس العين'],Amuda:['عامودا','عامودا'],'Tal Abyad':['تل‌ابیض','تل أبيض']
+};
+
+/* ================= ڕێکخستنەکان ================= */
+const S=Object.assign({lang:'ku',mode:null,cal:'solar',pal:'auto'},store.get('settings')||{});
+if(!LANGS[S.lang])S.lang='ku';
+if(!S.mode)S.mode=store.get('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+const saveS=()=>store.set('settings',S);
+let Lg=LANGS[S.lang];
+const t=k=>Lg.ui[k];
+const fd=s=>{const D=Lg.digits;return D?String(s).replace(/\d/g,d=>D[d]):String(s)};
 const T=n=>fd(Math.round(n)).replace('-','−');
-const MONTHS=['خاکەلێوە','گوڵان','جۆزەردان','پووشپەڕ','خەرمانان','گەلاوێژ','ڕەزبەر','گەڵاڕێزان','سەرماوەز','بەفرانبار','ڕێبەندان','ڕەشەمە'];
-const GMONTHS=['کانوونی دووەم','شوبات','ئازار','نیسان','ئایار','حوزەیران','تەممووز','ئاب','ئەیلوول','تشرینی یەکەم','تشرینی دووەم','کانوونی یەکەم'];
-const HMONTHS=['موحەڕەم','سەفەر','ڕەبیعی یەکەم','ڕەبیعی دووەم','جومادای یەکەم','جومادای دووەم','ڕەجەب','شەعبان','ڕەمەزان','شەووال','زولقەعدە','زولحیجە'];
-function hijriCalc(y,m,d){
-  const a=Math.floor((14-m)/12),yy=y+4800-a,mm=m+12*a-3;
-  const jd=d+Math.floor((153*mm+2)/5)+365*yy+Math.floor(yy/4)-Math.floor(yy/100)+Math.floor(yy/400)-32045;
-  let l=jd-1948440+10632;const n=Math.floor((l-1)/10631);l=l-10631*n+354;
-  const j=Math.floor((10985-l)/5316)*Math.floor(50*l/17719)+Math.floor(l/5670)*Math.floor(43*l/15238);
-  l=l-Math.floor((30-j)/15)*Math.floor(17719*j/50)-Math.floor(j/16)*Math.floor(15238*j/43)+29;
-  const hm=Math.floor(24*l/709);
-  return [30*n+j-30,hm,l-Math.floor(709*hm/24)];
+
+function cityName(p){
+  if(S.lang==='ku')return p.n;
+  if(S.lang==='en')return p.en;
+  const n=NAMES[p.en];return n?n[S.lang==='fa'?0:1]:p.en;
 }
-function toHijri(y,m,d){
-  try{
-    const p=new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'numeric',year:'numeric',timeZone:'UTC'}).formatToParts(new Date(Date.UTC(y,m-1,d,12)));
-    const g=t=>parseInt(p.find(x=>x.type===t).value,10);
-    const r=[g('year'),g('month'),g('day')];
-    if(r.every(v=>v>0))return r;
-  }catch(e){}
-  return hijriCalc(y,m,d);
+const pc=p=>({en:p.en,n:p.n,lat:p.lat,lon:p.lon});
+function cityLabel(c){
+  const p=c.en&&PRESETS.find(x=>x.en===c.en);
+  return p?cityName(p):c.n;
 }
-function fmtDate(y,m,d){
-  if(S.cal==='greg')return {y:y,m:GMONTHS[m-1],d:d};
-  if(S.cal==='hijri'){const h=toHijri(y,m,d);return {y:h[0],m:HMONTHS[h[1]-1],d:h[2]}}
-  const j=toJalali(y,m,d);return {y:j[0],m:MONTHS[j[1]-1],d:j[2]};
-}
-function season(){
-  const n=new Date(),j=toJalali(n.getFullYear(),n.getMonth()+1,n.getDate())[1];
-  return j<=3?'spring':j<=6?'summer':j<=9?'autumn':'winter';
-}
+
+/* ================= ساڵنامەکان ================= */
 function toJalali(gy,gm,gd){
   const gdm=[0,31,59,90,120,151,181,212,243,273,304,334];
   let jy=(gy<=1600)?0:979;gy-=(gy<=1600)?621:1600;
@@ -189,45 +273,36 @@ function toJalali(gy,gm,gd){
   const jd=1+((days<186)?(days%31):((days-186)%30));
   return [jy,jm,jd];
 }
-const DAYS=['یەکشەممە','دووشەممە','سێشەممە','چوارشەممە','پێنجشەممە','هەینی','شەممە'];
-const DIRS=['باکوور','باکووری ڕۆژهەڵات','ڕۆژهەڵات','باشووری ڕۆژهەڵات','باشوور','باشووری ڕۆژئاوا','ڕۆژئاوا','باکووری ڕۆژئاوا'];
-const GROUPS={
-  ir:['ڕۆژهەڵاتی کوردستان · ئێران'],
-  iq:['باشووری کوردستان · عێراق'],
-  tr:['باکووری کوردستان · تورکیا'],
-  sy:['ڕۆژئاوای کوردستان · سووریا']
-};
-const CC={IR:'ئێران',IQ:'عێراق',SY:'سووریا',TR:'تورکیا'};
-const P=(n,en,lat,lon,g)=>({n,en,lat,lon,g});
-const PRESETS=[
-  // ڕۆژهەڵات — Iran
-  P('سنە','Sanandaj',35.3219,46.9862,'ir'),P('مەهاباد','Mahabad',36.7631,45.7222,'ir'),P('کرماشان','Kermanshah',34.3142,47.065,'ir'),
-  P('ئیلام','Ilam',33.6374,46.4227,'ir'),P('ورمێ','Urmia',37.5527,45.0761,'ir'),P('بانە','Baneh',35.9975,45.8853,'ir'),
-  P('سەقز','Saqqez',36.2493,46.2735,'ir'),P('مەریوان','Marivan',35.5219,46.176,'ir'),P('بۆکان','Bukan',36.5213,46.2088,'ir'),
-  P('پیرانشار','Piranshahr',36.7,45.1426,'ir'),P('ڕەوانسەر','Ravansar',34.7126,46.6528,'ir'),P('سەردەشت','Sardasht',36.1552,45.4784,'ir'),
-  P('پاوە','Paveh',35.0432,46.3569,'ir'),P('کامیاران','Kamyaran',34.7956,46.9355,'ir'),P('دیواندەرە','Divandarreh',35.9139,47.0267,'ir'),
-  P('ئوشنەویە','Oshnavieh',37.0397,45.0978,'ir'),P('نەغەدە','Naqadeh',36.9553,45.388,'ir'),
-  // باشوور — Iraq
-  P('هەولێر','Erbil',36.1901,44.0091,'iq'),P('سلێمانی','Sulaymaniyah',35.5558,45.4351,'iq'),P('دهۆک','Duhok',36.867,42.988,'iq'),
-  P('کەرکووک','Kirkuk',35.4681,44.3922,'iq'),P('هەڵەبجە','Halabja',35.1778,45.9861,'iq'),P('زاخۆ','Zakho',37.1439,42.6872,'iq'),
-  P('ڕانیە','Ranya',36.2562,44.8836,'iq'),P('کەلار','Kalar',34.6277,45.3189,'iq'),P('ئامێدی','Amedi',37.0914,43.4872,'iq'),
-  P('ڕەواندز','Rawanduz',36.6119,44.5236,'iq'),P('کۆیە','Koya',36.0827,44.6277,'iq'),P('چەمچەماڵ','Chamchamal',35.5298,44.8283,'iq'),
-  P('خانەقین','Khanaqin',34.3453,45.3869,'iq'),P('شەنگال','Sinjar',36.3209,41.8761,'iq'),
-  // باکوور — Turkey
-  P('ئامەد','Diyarbakir',37.9144,40.2306,'tr'),P('وان','Van',38.4891,43.4089,'tr'),P('ماردین','Mardin',37.3212,40.7245,'tr'),
-  P('بەتمان','Batman',37.8812,41.1351,'tr'),P('حەکاری','Hakkari',37.5744,43.7408,'tr'),P('شرناخ','Sirnak',37.5164,42.4611,'tr'),
-  P('ئورفا','Sanliurfa',37.1591,38.7969,'tr'),P('بەدلیس','Bitlis',38.4006,42.1095,'tr'),P('دێرسم','Tunceli',39.1079,39.5401,'tr'),
-  P('مووش','Mus',38.7432,41.5064,'tr'),P('ئاگری','Agri',39.7191,43.0503,'tr'),P('سێئرت','Siirt',37.9333,41.95,'tr'),
-  P('چەولیگ','Bingol',38.8854,40.498,'tr'),P('خارپێت','Elazig',38.681,39.2264,'tr'),
-  // ڕۆژئاوا — Syria
-  P('قامیشلۆ','Qamishli',37.0522,41.2314,'sy'),P('کۆبانێ','Kobani',36.89,38.352,'sy'),P('عەفرین','Afrin',36.5119,36.8686,'sy'),
-  P('حەسەکە','Hasakah',36.5024,40.7477,'sy'),P('دێرک','Derik',37.3547,42.1989,'sy'),P('سەرێکانی','Ras al-Ayn',36.85,40.07,'sy'),
-  P('عامودا','Amuda',37.1058,40.9356,'sy'),P('تەل‌ئەبیەد','Tal Abyad',36.6967,38.9546,'sy')
-];
+function hijriCalc(y,m,d){
+  const a=Math.floor((14-m)/12),yy=y+4800-a,mm=m+12*a-3;
+  const jd=d+Math.floor((153*mm+2)/5)+365*yy+Math.floor(yy/4)-Math.floor(yy/100)+Math.floor(yy/400)-32045;
+  let l=jd-1948440+10632;const n=Math.floor((l-1)/10631);l=l-10631*n+354;
+  const j=Math.floor((10985-l)/5316)*Math.floor(50*l/17719)+Math.floor(l/5670)*Math.floor(43*l/15238);
+  l=l-Math.floor((30-j)/15)*Math.floor(17719*j/50)-Math.floor(j/16)*Math.floor(15238*j/43)+29;
+  const hm=Math.floor(24*l/709);
+  return [30*n+j-30,hm,l-Math.floor(709*hm/24)];
+}
+function toHijri(y,m,d){
+  try{
+    const p=new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'numeric',year:'numeric',timeZone:'UTC'}).formatToParts(new Date(Date.UTC(y,m-1,d,12)));
+    const g=k=>parseInt(p.find(x=>x.type===k).value,10);
+    const r=[g('year'),g('month'),g('day')];
+    if(r.every(v=>v>0))return r;
+  }catch(e){}
+  return hijriCalc(y,m,d);
+}
+function fmtDate(y,m,d){
+  const M=Lg.months;
+  if(S.cal==='greg')return {y:y,m:M.greg[m-1],d:d};
+  if(S.cal==='hijri'){const h=toHijri(y,m,d);return {y:h[0],m:M.hijri[h[1]-1],d:h[2]}}
+  const j=toJalali(y,m,d);return {y:j[0],m:M.solar[j[1]-1],d:j[2]};
+}
+function season(){
+  const n=new Date(),j=toJalali(n.getFullYear(),n.getMonth()+1,n.getDate())[1];
+  return j<=3?'spring':j<=6?'summer':j<=9?'autumn':'winter';
+}
 
-const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-
-/* ---------- icons ---------- */
+/* ================= ئایکۆنەکان ================= */
 const SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>';
 const MOON='<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>';
 const CLOUD='<path d="M7 19h10a4 4 0 0 0 .5-7.97A5.5 5.5 0 0 0 6.8 10.6 4.2 4.2 0 0 0 7 19z"/>';
@@ -252,18 +327,12 @@ function kindOf(c){
   if((c>=71&&c<=77)||c===85||c===86)return 'snow';
   if(c>=95)return 'storm'; return 'cloud';
 }
-const LABEL={clear:['ئاسمان ساف','ئاسمان ساف'],partly:['کەمێک هەور','کەمێک هەور'],cloud:['هەوراوی','هەوراوی'],fog:['تەمومژاوی','تەمومژاوی'],rain:['بارانی','بارانی'],snow:['بەفراوی','بەفراوی'],storm:['هەورەتریشقە','هەورەتریشقە']};
-function uvLabel(u){return u<3?'کەم':u<6?'مامناوەند':u<8?'بەرز':u<11?'زۆر بەرز':'ڕادەبەدەر'}
+const uvLabel=u=>Lg.uvl[u<3?0:u<6?1:u<8?2:u<11?3:4];
 
-/* ---------- ڕێکخستنەکان ---------- */
+/* ================= ڕووکار و ڕێکخستنەکان ================= */
 const SUNI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">'+SUN+'</svg>';
 const MOONI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">'+MOON+'</svg>';
-const S=Object.assign({mode:null,cal:'solar',pal:'auto'},store.get('settings')||{});
-if(!S.mode)S.mode=store.get('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
-const saveS=()=>store.set('settings',S);
-const MODES=[['light','ڕووناک'],['dark','تاریک']];
-const PALS=[['auto','خۆکار (بەپێی وەرز)','#999'],['plain','سادە','#555'],['spring','بەهار','#5aa84f'],['summer','هاوین','#f0a020'],['autumn','پاییز','#d2652a'],['winter','زستان','#4a8fd0']];
-const CALS=[['solar','هەتاوی'],['greg','زایینی'],['hijri','کۆچی مانگی']];
+const PAL_DOTS={auto:'#999',plain:'#555',spring:'#5aa84f',summer:'#f0a020',autumn:'#d2652a',winter:'#4a8fd0'};
 function applyLook(){
   const r=document.documentElement,pal=S.pal==='auto'?season():S.pal;
   if(pal==='plain')r.removeAttribute('data-pal');else r.dataset.pal=pal;
@@ -273,30 +342,34 @@ function applyLook(){
   document.querySelector('meta[name=apple-mobile-web-app-status-bar-style]').content=S.mode==='dark'?'black-translucent':'default';
 }
 function renderSettings(){
-  const btn=(key,list,withDot)=>list.map(o=>'<button class="opt'+(S[key]===o[0]?' on':'')+'" data-k="'+o[0]+'">'+(withDot?'<i style="background:'+o[2]+'"></i>':'')+o[1]+'</button>').join('');
-  $('#setMode').innerHTML=btn('mode',MODES);
-  $('#setPal').innerHTML=btn('pal',PALS,true);
-  $('#setCal').innerHTML=btn('cal',CALS);
+  const mk=(key,list)=>list.map(o=>'<button class="opt'+(S[key]===o[0]?' on':'')+'" data-k="'+o[0]+'">'+(o[2]?'<i style="background:'+o[2]+'"></i>':'')+o[1]+'</button>').join('');
+  $('#setLang').innerHTML=mk('lang',Object.keys(LANGS).map(k=>[k,LANGS[k].name]));
+  $('#setMode').innerHTML=mk('mode',[['light',t('light')],['dark',t('dark')]]);
+  $('#setPal').innerHTML=mk('pal',['auto','plain','spring','summer','autumn','winter'].map(k=>[k,Lg.pals[k],PAL_DOTS[k]]));
+  $('#setCal').innerHTML=mk('cal',['solar','greg','hijri'].map(k=>[k,Lg.cals[k]]));
 }
 function bindOpts(id,key){
   $(id).onclick=e=>{
     const b=e.target.closest('.opt');if(!b)return;
-    S[key]=b.dataset.k;saveS();applyLook();renderSettings();
+    S[key]=b.dataset.k;
+    if(key==='lang'){S.cal=LANGS[S.lang].cal;saveS();applyLang();return}
+    saveS();applyLook();renderSettings();
     if(key==='cal'&&lastData)draw(lastData);
   };
 }
-bindOpts('#setMode','mode');bindOpts('#setPal','pal');bindOpts('#setCal','cal');
+bindOpts('#setLang','lang');bindOpts('#setMode','mode');bindOpts('#setPal','pal');bindOpts('#setCal','cal');
 const setSheet=$('#settings');
 $('#btnSettings').onclick=()=>{renderSettings();setSheet.classList.add('open');setSheet.setAttribute('aria-hidden','false')};
 $('#btnCloseSet').onclick=()=>{setSheet.classList.remove('open');setSheet.setAttribute('aria-hidden','true')};
 $('#btnTheme').onclick=()=>{S.mode=S.mode==='dark'?'light':'dark';saveS();applyLook();renderSettings()};
-applyLook();
 
-/* ---------- weather ---------- */
-let cur=store.get('city')||PRESETS[0];
+/* ================= کەشوهەوا ================= */
+let cur=store.get('city')||pc(PRESETS[0]);
+if(!cur.en){const p=PRESETS.find(x=>x.n===cur.n);if(p)cur=pc(p)}
+let lastData=null;
+function showCity(){$('#city').textContent=cityLabel(cur)}
 async function load(city){
-  cur=city;store.set('city',{n:city.n,lat:city.lat,lon:city.lon});
-  $('#city').textContent=city.n;
+  cur=city;store.set('city',city);showCity();
   const app=$('#app');app.classList.add('loading');$('#err').hidden=true;
   try{
     const u='https://api.open-meteo.com/v1/forecast?latitude='+city.lat+'&longitude='+city.lon+
@@ -309,29 +382,27 @@ async function load(city){
   }catch(e){$('#err').hidden=false}
   app.classList.remove('loading');
 }
-let lastData=null;
 function draw(d){
   lastData=d;
   const c=d.current,hr=d.hourly,dl=d.daily;
   const [y,m,dd]=c.time.slice(0,10).split('-').map(Number);
   const fh=fmtDate(y,m,dd);
   $('#date').textContent=fd(fh.d)+' '+fh.m+' '+fd(fh.y);
-  const wd=DAYS[new Date(y,m-1,dd).getDay()];
+  const wd=Lg.days[new Date(y,m-1,dd).getDay()];
   $('#temp').innerHTML=T(c.temperature_2m)+'<span class="deg">°</span>';
-  const ck=kindOf(c.weather_code);
-  $('#cond').innerHTML='<b>'+wd+'</b> · '+LABEL[ck][0];
-  let i0=hr.time.findIndex(t=>t.startsWith(c.time.slice(0,13)));if(i0<0)i0=0;
+  $('#cond').innerHTML='<b>'+wd+'</b> · '+Lg.cond[kindOf(c.weather_code)];
+  let i0=hr.time.findIndex(x=>x.startsWith(c.time.slice(0,13)));if(i0<0)i0=0;
   let h='';
   for(let k=0;k<24&&i0+k<hr.time.length;k++){
     const i=i0+k,code=k===0?c.weather_code:hr.weather_code[i],day=k===0?c.is_day:hr.is_day[i];
-    h+='<div class="h"><span class="t">'+(k===0?'ئێستا':fd(hr.time[i].slice(11,16)))+'</span>'+icon(kindOf(code),day)+'<b>'+T(hr.temperature_2m[i])+'°</b></div>';
+    h+='<div class="h"><span class="t">'+(k===0?t('now'):fd(hr.time[i].slice(11,16)))+'</span>'+icon(kindOf(code),day)+'<b>'+T(hr.temperature_2m[i])+'°</b></div>';
   }
   $('#hours').innerHTML=h;
   $('#sunrise').innerHTML='<span class="ltr">'+fd(dl.sunrise[0].slice(11,16))+'</span>';
   $('#sunset').innerHTML='<span class="ltr">'+fd(dl.sunset[0].slice(11,16))+'</span>';
   $('#feels').innerHTML='<span class="ltr">'+T(c.apparent_temperature)+'°</span>';
-  $('#wind').innerHTML='<span class="ltr">'+fd(Math.round(c.wind_speed_10m))+' km/h</span><small>'+DIRS[Math.round(c.wind_direction_10m/45)%8]+'</small>';
-  $('#hum').textContent=fd(Math.round(c.relative_humidity_2m))+'٪';
+  $('#wind').innerHTML='<span class="ltr">'+fd(Math.round(c.wind_speed_10m))+' km/h</span><small>'+Lg.dirs[Math.round(c.wind_direction_10m/45)%8]+'</small>';
+  $('#hum').textContent=fd(Math.round(c.relative_humidity_2m))+Lg.pct;
   $('#pres').innerHTML='<span class="ltr">'+fd(Math.round(c.surface_pressure))+' hPa</span>';
   const vis=hr.visibility&&hr.visibility[i0]!=null?Math.round(hr.visibility[i0]/1000):null;
   $('#vis').innerHTML=vis==null?'—':'<span class="ltr">'+fd(vis)+' km</span>';
@@ -341,61 +412,77 @@ function draw(d){
   for(let i=1;i<dl.time.length&&i<=10;i++){
     const [yy,mm,d2]=dl.time[i].split('-').map(Number);
     const f=fmtDate(yy,mm,d2);
-    ds+='<div class="d"><div class="w">'+DAYS[new Date(yy,mm-1,d2).getDay()]+'</div><div class="t">'+fd(f.d)+' '+f.m+'</div><b>'+T(dl.temperature_2m_min[i])+'°/'+T(dl.temperature_2m_max[i])+'°</b></div>';
+    ds+='<div class="d"><div class="w">'+Lg.days[new Date(yy,mm-1,d2).getDay()]+'</div><div class="t">'+fd(f.d)+' '+f.m+'</div><b>'+T(dl.temperature_2m_min[i])+'°/'+T(dl.temperature_2m_max[i])+'°</b></div>';
   }
   $('#days').innerHTML=ds;
 }
 
-/* ---------- search ---------- */
+/* ================= گەڕان ================= */
 const sheet=$('#sheet'),q=$('#q'),res=$('#res');
-const norm=s=>String(s).toLowerCase().replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[ەه]/g,'ه').replace(/[ێ]/g,'ی').replace(/[ۆ]/g,'و').replace(/[\u064B-\u065F\u200c]/g,'').trim();
+const norm=s=>String(s).toLowerCase().replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[ةەه]/g,'ه').replace(/ێ/g,'ی').replace(/ۆ/g,'و').replace(/[أإآ]/g,'ا').replace(/[ً-ٟ‌‍]/g,'').replace(/\s+/g,' ').trim();
+const groupTitle=g=>Lg.groups[g][0]+' · '+Lg.groups[g][1];
 function openSheet(){sheet.classList.add('open');sheet.setAttribute('aria-hidden','false');setTimeout(()=>q.focus(),250)}
 function closeSheet(){sheet.classList.remove('open');sheet.setAttribute('aria-hidden','true');q.blur()}
 function pick(c){closeSheet();q.value='';res.innerHTML='';load(c)}
 $('#btnSearch').onclick=openSheet;
 $('#btnClose').onclick=closeSheet;
 $('#btnLoc').onclick=()=>{
-  if(!navigator.geolocation){res.innerHTML='<div class="empty">ئامێرەکەت پشتگیری شوێن ناکات.</div>';return}
+  if(!navigator.geolocation){res.innerHTML='<div class="empty">'+t('noGeo')+'</div>';return}
   res.innerHTML='<div class="empty">…</div>';
-  navigator.geolocation.getCurrentPosition(p=>pick({n:'شوێنی من',lat:p.coords.latitude,lon:p.coords.longitude}),()=>{res.innerHTML='<div class="empty">ڕێگەپێدان بە شوێن نەدرا.</div>'},{timeout:10000});
+  navigator.geolocation.getCurrentPosition(p=>pick({n:t('myLoc'),lat:p.coords.latitude,lon:p.coords.longitude}),()=>{res.innerHTML='<div class="empty">'+t('denied')+'</div>'},{timeout:10000});
 };
-(function(){
-  let h='';
-  for(const g of Object.keys(GROUPS)){
-    h+='<div class="gt">'+GROUPS[g][0]+'</div><div class="chips">'+PRESETS.filter(p=>p.g===g).map(p=>'<button class="chip" data-n="'+p.n+'">'+p.n+'</button>').join('')+'</div>';
-  }
-  $('#groups').innerHTML=h;
-  $('#groups').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;pick(PRESETS.find(p=>p.n===b.dataset.n))};
-})();
+function buildGroups(){
+  $('#groups').innerHTML=GROUP_ORDER.map(g=>'<div class="gt">'+groupTitle(g)+'</div><div class="chips">'+PRESETS.filter(p=>p.g===g).map(p=>'<button class="chip" data-en="'+p.en+'">'+cityName(p)+'</button>').join('')+'</div>').join('');
+}
+$('#groups').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;pick(pc(PRESETS.find(p=>p.en===b.dataset.en)))};
 let timer,seq=0,found=[];
 function showResults(list,msg){
   found=list;
-  res.innerHTML=list.length?list.map((c,i)=>'<button class="item" data-i="'+i+'"><span>'+c.n+'</span><small>'+(c.sub||'')+'</small></button>').join(''):(msg?'<div class="empty">'+msg+'</div>':'');
+  res.innerHTML=list.length?list.map((c,i)=>'<button class="item" data-i="'+i+'"><span>'+c.label+'</span><small>'+(c.sub||'')+'</small></button>').join(''):(msg?'<div class="empty">'+msg+'</div>':'');
 }
-res.onclick=e=>{const b=e.target.closest('.item');if(b)pick(found[+b.dataset.i])};
+res.onclick=e=>{const b=e.target.closest('.item');if(b)pick(found[+b.dataset.i].city)};
 q.addEventListener('input',()=>{
   clearTimeout(timer);
   const v=q.value.trim();
   if(!v){res.innerHTML='';return}
   const nv=norm(v);
-  const local=PRESETS.filter(p=>norm(p.n).includes(nv)||p.en.toLowerCase().includes(nv)).map(p=>({...p,sub:GROUPS[p.g][0].split(' · ')[1]}));
+  const local=PRESETS.filter(p=>{
+    const n=NAMES[p.en]||[];
+    return [p.n,p.en,n[0]||'',n[1]||''].some(x=>norm(x).includes(nv));
+  }).map(p=>({city:pc(p),label:cityName(p),sub:Lg.groups[p.g][1],lat:p.lat,lon:p.lon}));
   showResults(local);
   if(v.length<2)return;
   const my=++seq;
   timer=setTimeout(async()=>{
     try{
-      const r=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(v)+'&count=20&language=en&format=json');
+      const lg=S.lang==='ku'?'en':S.lang;
+      const r=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(v)+'&count=20&language='+lg+'&format=json');
       const d=await r.json();
       if(my!==seq)return;
       const extra=(d.results||[]).filter(x=>CC[x.country_code]).filter(x=>!local.some(l=>Math.abs(l.lat-x.latitude)<.15&&Math.abs(l.lon-x.longitude)<.15))
-        .map(x=>({n:x.name,lat:x.latitude,lon:x.longitude,sub:[x.admin1,CC[x.country_code]].filter(Boolean).join('، ')}));
-      const all=local.concat(extra);
-      showResults(all,'هیچ شارێک نەدۆزرایەوە');
-    }catch(e){if(my===seq)showResults(local,local.length?'':'پەیوەندی بە ئینتەرنێتەوە نییە')}
+        .map(x=>({city:{n:x.name,lat:x.latitude,lon:x.longitude},label:x.name,sub:[x.admin1,Lg.groups[CC[x.country_code]][1]].filter(Boolean).join(S.lang==='en'?', ':'، ')}));
+      showResults(local.concat(extra),t('noRes'));
+    }catch(e){if(my===seq)showResults(local,local.length?'':t('err'))}
   },350);
 });
-q.addEventListener('keydown',e=>{if(e.key==='Enter'&&found.length)pick(found[0])});
+q.addEventListener('keydown',e=>{if(e.key==='Enter'&&found.length)pick(found[0].city)});
 
+/* ================= زمان ================= */
+function applyLang(){
+  Lg=LANGS[S.lang];
+  const r=document.documentElement;
+  r.lang=Lg.code;r.dir=Lg.dir;
+  document.title=t('title');
+  document.querySelectorAll('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));
+  document.querySelectorAll('[data-ip]').forEach(e=>e.placeholder=t(e.dataset.ip));
+  document.querySelectorAll('[data-ia]').forEach(e=>e.setAttribute('aria-label',t(e.dataset.ia)));
+  res.innerHTML='';q.value='';
+  buildGroups();renderSettings();showCity();
+  if(lastData)draw(lastData);
+}
+
+applyLook();
+applyLang();
 load(cur);
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
