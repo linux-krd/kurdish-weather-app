@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="ckb" dir="rtl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ebebeb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="کەشوهەوا">
+<title>کەشوهەوا — کوردستان</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ebebeb;--fg:#222;--mute:#8a8a8a;--line:#d6d6d6;--card:#e0e0e0;--accent:#222}
+[data-theme=dark]{--bg:#222;--fg:#f2f2f2;--mute:#8b8b8b;--line:#3a3a3a;--card:#2e2e2e;--accent:#f2f2f2}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:'Vazirmatn',system-ui,-apple-system,sans-serif;transition:background .3s,color .3s}
+.app{max-width:480px;margin:0 auto;min-height:100dvh;padding:calc(env(safe-area-inset-top) + 22px) 26px calc(env(safe-area-inset-bottom) + 26px);display:flex;flex-direction:column;transition:opacity .25s}
+.app.loading{opacity:.35}
+header{display:flex;justify-content:space-between;align-items:flex-start}
+h1{font-size:1.2rem;font-weight:700;margin:0;line-height:1.4}
+.date{color:var(--mute);font-size:.82rem}
+.actions{display:flex;gap:2px;margin-inline-end:-8px}
+button{font-family:inherit}
+button.icon{background:none;border:0;color:var(--fg);padding:8px;border-radius:50%;cursor:pointer;display:grid;place-items:center}
+button.icon svg{width:24px;height:24px}
+.temp{direction:ltr;text-align:right;font-size:min(36vw,10.5rem);font-weight:800;line-height:1.05;letter-spacing:-.05em;margin:22px 0 0;color:var(--accent);transition:color .3s}
+.temp .deg{font-weight:800}
+.cond{color:var(--mute);font-size:.95rem;margin:2px 0 0}
+.cond b{color:var(--fg);font-weight:600}
+.hours{display:flex;gap:16px;overflow-x:auto;padding:26px 0 8px;scrollbar-width:none;margin-top:6px}
+.hours::-webkit-scrollbar{display:none}
+.h{flex:0 0 auto;min-width:46px;text-align:center;font-size:.72rem;display:flex;flex-direction:column;align-items:center;gap:6px}
+.h .t{color:var(--mute)}
+.h b{font-weight:700;font-size:.82rem;direction:ltr;unicode-bidi:isolate}
+.h svg{width:28px;height:28px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px 16px;margin-top:26px}
+.grid .l{color:var(--mute);font-size:.85rem}
+.grid .v{font-size:1.05rem;font-weight:600;margin-top:2px}
+.grid .v small{display:block;font-size:.7rem;color:var(--mute);font-weight:400}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+.days{display:flex;justify-content:space-between;gap:10px;margin-top:auto;padding-top:34px;overflow-x:auto;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.d{flex:0 0 auto;font-size:.68rem;text-align:center}
+.d .t{color:var(--mute);white-space:nowrap}
+.d b{display:block;font-weight:700;font-size:.78rem;margin-top:3px;direction:ltr}
+.err{margin-top:16px;padding:12px 14px;border-radius:12px;background:var(--card);font-size:.85rem}
+.sheet{position:fixed;inset:0;background:var(--bg);z-index:20;transform:translateY(105%);transition:transform .32s cubic-bezier(.2,.8,.2,1);overflow-y:auto}
+.sheet.open{transform:none}
+.sheet .in{max-width:480px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 18px) 22px calc(env(safe-area-inset-bottom) + 30px)}
+.srow{display:flex;gap:8px;align-items:center}
+.srow input{flex:1;min-width:0;font:inherit;font-size:1rem;color:var(--fg);background:var(--card);border:0;border-radius:14px;padding:13px 16px;outline:none}
+.srow input::placeholder{color:var(--mute)}
+.res{margin-top:10px}
+.item{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:right;background:none;border:0;border-bottom:1px solid var(--line);color:var(--fg);padding:13px 2px;font-size:.98rem;cursor:pointer}
+.item small{color:var(--mute);font-size:.75rem}
+.gt{margin:26px 0 10px;font-size:.78rem;color:var(--mute)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--card);color:var(--fg);border:0;border-radius:999px;padding:8px 15px;font-size:.88rem;cursor:pointer}
+.chip:active,.item:active{opacity:.6}
+.empty{color:var(--mute);font-size:.85rem;padding:14px 2px}
+
+/* ڕەنگی وەرزەکان */
+[data-pal=spring]{--bg:#e9f0e4;--fg:#1f2d1c;--mute:#7f8f7a;--line:#d0dccb;--card:#dde8d6;--accent:#3f8f3a}
+[data-pal=spring][data-theme=dark]{--bg:#1b241a;--fg:#eaf3e6;--mute:#8a9b86;--line:#2f3d2d;--card:#25301f;--accent:#7cc66f}
+[data-pal=summer]{--bg:#f6ecd8;--fg:#2b2112;--mute:#9a8a6c;--line:#e4d5b6;--card:#eddfc2;--accent:#e08a00}
+[data-pal=summer][data-theme=dark]{--bg:#261f12;--fg:#f6ecd8;--mute:#a09070;--line:#3d3320;--card:#31291a;--accent:#ffb02e}
+[data-pal=autumn]{--bg:#f0e3d8;--fg:#2c1d14;--mute:#988070;--line:#dcc8b8;--card:#e6d3c4;--accent:#c4511a}
+[data-pal=autumn][data-theme=dark]{--bg:#251a14;--fg:#f2e4d9;--mute:#9e8878;--line:#3c2b21;--card:#30221b;--accent:#f08a4b}
+[data-pal=winter]{--bg:#e6edf3;--fg:#17222c;--mute:#7b8b99;--line:#cfdbe5;--card:#d9e4ed;--accent:#2d6fa8}
+[data-pal=winter][data-theme=dark]{--bg:#161e26;--fg:#e8f0f6;--mute:#8497a6;--line:#2a3744;--card:#212c37;--accent:#6bb2ea}
+.d .w{color:var(--fg);font-weight:600;font-size:.74rem;margin-bottom:2px;white-space:nowrap}
+.days{gap:20px}
+.st{flex:1;margin:0;font-size:1.1rem;font-weight:700}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{display:inline-flex;align-items:center;gap:8px;background:var(--card);color:var(--fg);border:1.5px solid transparent;border-radius:999px;padding:9px 16px;font:inherit;font-size:.9rem;cursor:pointer;transition:border-color .2s}
+.opt.on{border-color:var(--accent)}
+.opt i{width:12px;height:12px;border-radius:50%;display:inline-block}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header>
+    <div>
+      <h1 id="city">…</h1>
+      <div class="date" id="date">&nbsp;</div>
+    </div>
+    <div class="actions">
+      <button class="icon" id="btnSearch" aria-label="گەڕان"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button>
+      <button class="icon" id="btnSettings" aria-label="ڕێکخستنەکان"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      <button class="icon" id="btnTheme" aria-label="ڕووکار"></button>
+    </div>
+  </header>
+
+  <div class="temp" id="temp">—</div>
+  <div class="cond" id="cond">&nbsp;</div>
+  <div class="err" id="err" hidden>پەیوەندی بە ئینتەرنێتەوە نییە، دووبارە هەوڵ بدەرەوە.</div>
+
+  <div class="hours" id="hours"></div>
+
+  <div class="grid">
+    <div><div class="l">هەڵهاتنی خۆر</div><div class="v" id="sunrise">—</div></div>
+    <div><div class="l">ئاوابوونی خۆر</div><div class="v" id="sunset">—</div></div>
+    <div><div class="l">هەستپێکراو</div><div class="v" id="feels">—</div></div>
+    <div><div class="l">با</div><div class="v" id="wind">—</div></div>
+    <div><div class="l">شێداری</div><div class="v" id="hum">—</div></div>
+    <div><div class="l">پەستانی هەوا</div><div class="v" id="pres">—</div></div>
+    <div><div class="l">ڕوونی دیمەن</div><div class="v" id="vis">—</div></div>
+    <div><div class="l">تیشکی UV</div><div class="v" id="uv">—</div></div>
+  </div>
+
+  <div class="days" id="days"></div>
+</div>
+
+<div class="sheet" id="sheet" aria-hidden="true">
+  <div class="in">
+    <div class="srow">
+      <input id="q" type="search" placeholder="گەڕان بەدوای شار…" autocomplete="off" enterkeyhint="search">
+      <button class="icon" id="btnLoc" aria-label="شوێنی من"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/><circle cx="12" cy="12" r="7.5"/></svg></button>
+      <button class="icon" id="btnClose" aria-label="داخستن"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="res" id="res"></div>
+    <div id="groups"></div>
+  </div>
+</div>
+
+<div class="sheet" id="settings" aria-hidden="true">
+  <div class="in">
+    <div class="srow">
+      <h2 class="st">ڕێکخستنەکان</h2>
+      <button class="icon" id="btnCloseSet" aria-label="داخستن"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="gt">ڕووکار</div>
+    <div class="opts" id="setMode"></div>
+    <div class="gt">ڕەنگی وەرزەکان</div>
+    <div class="opts" id="setPal"></div>
+    <div class="gt">ساڵنامە</div>
+    <div class="opts" id="setCal"></div>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const KD='۰۱۲۳۴۵۶۷۸۹';
+const fd=s=>String(s).replace(/\d/g,d=>KD[d]);
+const T=n=>fd(Math.round(n)).replace('-','−');
+const MONTHS=['خاکەلێوە','گوڵان','جۆزەردان','پووشپەڕ','خەرمانان','گەلاوێژ','ڕەزبەر','گەڵاڕێزان','سەرماوەز','بەفرانبار','ڕێبەندان','ڕەشەمە'];
+const GMONTHS=['کانوونی دووەم','شوبات','ئازار','نیسان','ئایار','حوزەیران','تەممووز','ئاب','ئەیلوول','تشرینی یەکەم','تشرینی دووەم','کانوونی یەکەم'];
+const HMONTHS=['موحەڕەم','سەفەر','ڕەبیعی یەکەم','ڕەبیعی دووەم','جومادای یەکەم','جومادای دووەم','ڕەجەب','شەعبان','ڕەمەزان','شەووال','زولقەعدە','زولحیجە'];
+function hijriCalc(y,m,d){
+  const a=Math.floor((14-m)/12),yy=y+4800-a,mm=m+12*a-3;
+  const jd=d+Math.floor((153*mm+2)/5)+365*yy+Math.floor(yy/4)-Math.floor(yy/100)+Math.floor(yy/400)-32045;
+  let l=jd-1948440+10632;const n=Math.floor((l-1)/10631);l=l-10631*n+354;
+  const j=Math.floor((10985-l)/5316)*Math.floor(50*l/17719)+Math.floor(l/5670)*Math.floor(43*l/15238);
+  l=l-Math.floor((30-j)/15)*Math.floor(17719*j/50)-Math.floor(j/16)*Math.floor(15238*j/43)+29;
+  const hm=Math.floor(24*l/709);
+  return [30*n+j-30,hm,l-Math.floor(709*hm/24)];
+}
+function toHijri(y,m,d){
+  try{
+    const p=new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'numeric',year:'numeric',timeZone:'UTC'}).formatToParts(new Date(Date.UTC(y,m-1,d,12)));
+    const g=t=>parseInt(p.find(x=>x.type===t).value,10);
+    const r=[g('year'),g('month'),g('day')];
+    if(r.every(v=>v>0))return r;
+  }catch(e){}
+  return hijriCalc(y,m,d);
+}
+function fmtDate(y,m,d){
+  if(S.cal==='greg')return {y:y,m:GMONTHS[m-1],d:d};
+  if(S.cal==='hijri'){const h=toHijri(y,m,d);return {y:h[0],m:HMONTHS[h[1]-1],d:h[2]}}
+  const j=toJalali(y,m,d);return {y:j[0],m:MONTHS[j[1]-1],d:j[2]};
+}
+function season(){
+  const n=new Date(),j=toJalali(n.getFullYear(),n.getMonth()+1,n.getDate())[1];
+  return j<=3?'spring':j<=6?'summer':j<=9?'autumn':'winter';
+}
+function toJalali(gy,gm,gd){
+  const gdm=[0,31,59,90,120,151,181,212,243,273,304,334];
+  let jy=(gy<=1600)?0:979;gy-=(gy<=1600)?621:1600;
+  const gy2=(gm>2)?(gy+1):gy;
+  let days=(365*gy)+Math.floor((gy2+3)/4)-Math.floor((gy2+99)/100)+Math.floor((gy2+399)/400)-80+gd+gdm[gm-1];
+  jy+=33*Math.floor(days/12053);days%=12053;
+  jy+=4*Math.floor(days/1461);days%=1461;
+  if(days>365){jy+=Math.floor((days-1)/365);days=(days-1)%365}
+  const jm=(days<186)?1+Math.floor(days/31):7+Math.floor((days-186)/30);
+  const jd=1+((days<186)?(days%31):((days-186)%30));
+  return [jy,jm,jd];
+}
+const DAYS=['یەکشەممە','دووشەممە','سێشەممە','چوارشەممە','پێنجشەممە','هەینی','شەممە'];
+const DIRS=['باکوور','باکووری ڕۆژهەڵات','ڕۆژهەڵات','باشووری ڕۆژهەڵات','باشوور','باشووری ڕۆژئاوا','ڕۆژئاوا','باکووری ڕۆژئاوا'];
+const GROUPS={
+  ir:['ڕۆژهەڵاتی کوردستان · ئێران'],
+  iq:['باشووری کوردستان · عێراق'],
+  tr:['باکووری کوردستان · تورکیا'],
+  sy:['ڕۆژئاوای کوردستان · سووریا']
+};
+const CC={IR:'ئێران',IQ:'عێراق',SY:'سووریا',TR:'تورکیا'};
+const P=(n,en,lat,lon,g)=>({n,en,lat,lon,g});
+const PRESETS=[
+  // ڕۆژهەڵات — Iran
+  P('سنە','Sanandaj',35.3219,46.9862,'ir'),P('مەهاباد','Mahabad',36.7631,45.7222,'ir'),P('کرماشان','Kermanshah',34.3142,47.065,'ir'),
+  P('ئیلام','Ilam',33.6374,46.4227,'ir'),P('ورمێ','Urmia',37.5527,45.0761,'ir'),P('بانە','Baneh',35.9975,45.8853,'ir'),
+  P('سەقز','Saqqez',36.2493,46.2735,'ir'),P('مەریوان','Marivan',35.5219,46.176,'ir'),P('بۆکان','Bukan',36.5213,46.2088,'ir'),
+  P('پیرانشار','Piranshahr',36.7,45.1426,'ir'),P('ڕەوانسەر','Ravansar',34.7126,46.6528,'ir'),P('سەردەشت','Sardasht',36.1552,45.4784,'ir'),
+  P('پاوە','Paveh',35.0432,46.3569,'ir'),P('کامیاران','Kamyaran',34.7956,46.9355,'ir'),P('دیواندەرە','Divandarreh',35.9139,47.0267,'ir'),
+  P('ئوشنەویە','Oshnavieh',37.0397,45.0978,'ir'),P('نەغەدە','Naqadeh',36.9553,45.388,'ir'),
+  // باشوور — Iraq
+  P('هەولێر','Erbil',36.1901,44.0091,'iq'),P('سلێمانی','Sulaymaniyah',35.5558,45.4351,'iq'),P('دهۆک','Duhok',36.867,42.988,'iq'),
+  P('کەرکووک','Kirkuk',35.4681,44.3922,'iq'),P('هەڵەبجە','Halabja',35.1778,45.9861,'iq'),P('زاخۆ','Zakho',37.1439,42.6872,'iq'),
+  P('ڕانیە','Ranya',36.2562,44.8836,'iq'),P('کەلار','Kalar',34.6277,45.3189,'iq'),P('ئامێدی','Amedi',37.0914,43.4872,'iq'),
+  P('ڕەواندز','Rawanduz',36.6119,44.5236,'iq'),P('کۆیە','Koya',36.0827,44.6277,'iq'),P('چەمچەماڵ','Chamchamal',35.5298,44.8283,'iq'),
+  P('خانەقین','Khanaqin',34.3453,45.3869,'iq'),P('شەنگال','Sinjar',36.3209,41.8761,'iq'),
+  // باکوور — Turkey
+  P('ئامەد','Diyarbakir',37.9144,40.2306,'tr'),P('وان','Van',38.4891,43.4089,'tr'),P('ماردین','Mardin',37.3212,40.7245,'tr'),
+  P('بەتمان','Batman',37.8812,41.1351,'tr'),P('حەکاری','Hakkari',37.5744,43.7408,'tr'),P('شرناخ','Sirnak',37.5164,42.4611,'tr'),
+  P('ئورفا','Sanliurfa',37.1591,38.7969,'tr'),P('بەدلیس','Bitlis',38.4006,42.1095,'tr'),P('دێرسم','Tunceli',39.1079,39.5401,'tr'),
+  P('مووش','Mus',38.7432,41.5064,'tr'),P('ئاگری','Agri',39.7191,43.0503,'tr'),P('سێئرت','Siirt',37.9333,41.95,'tr'),
+  P('چەولیگ','Bingol',38.8854,40.498,'tr'),P('خارپێت','Elazig',38.681,39.2264,'tr'),
+  // ڕۆژئاوا — Syria
+  P('قامیشلۆ','Qamishli',37.0522,41.2314,'sy'),P('کۆبانێ','Kobani',36.89,38.352,'sy'),P('عەفرین','Afrin',36.5119,36.8686,'sy'),
+  P('حەسەکە','Hasakah',36.5024,40.7477,'sy'),P('دێرک','Derik',37.3547,42.1989,'sy'),P('سەرێکانی','Ras al-Ayn',36.85,40.07,'sy'),
+  P('عامودا','Amuda',37.1058,40.9356,'sy'),P('تەل‌ئەبیەد','Tal Abyad',36.6967,38.9546,'sy')
+];
+
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ---------- icons ---------- */
+const SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>';
+const MOON='<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>';
+const CLOUD='<path d="M7 19h10a4 4 0 0 0 .5-7.97A5.5 5.5 0 0 0 6.8 10.6 4.2 4.2 0 0 0 7 19z"/>';
+const smallCloud='<g transform="translate(1.2,-1) scale(.82)">'+CLOUD+'</g>';
+function icon(kind,day){
+  let b='';
+  switch(kind){
+    case 'clear': b=day?SUN:MOON;break;
+    case 'partly': b=day?'<g transform="translate(9,-1) scale(.5)">'+SUN+'</g><g transform="translate(0,3) scale(.82)">'+CLOUD+'</g>':'<g transform="translate(10,0) scale(.5)">'+MOON+'</g><g transform="translate(0,3) scale(.82)">'+CLOUD+'</g>';break;
+    case 'cloud': b=CLOUD;break;
+    case 'fog': b='<path d="M4 8h16M6 12h12M4 16h16M7 20h10"/>';break;
+    case 'rain': b=smallCloud+'<path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/>';break;
+    case 'snow': b=smallCloud+'<path d="M8 18.5v.01M12 20.5v.01M16 18.5v.01M10 22v.01M14 22v.01" stroke-width="2.4"/>';break;
+    case 'storm': b=smallCloud+'<path d="M12.5 14l-2.5 4h3.2l-1.7 4"/>';break;
+  }
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">'+b+'</svg>';
+}
+function kindOf(c){
+  if(c<=1)return 'clear'; if(c===2)return 'partly'; if(c===3)return 'cloud';
+  if(c===45||c===48)return 'fog';
+  if((c>=51&&c<=67)||(c>=80&&c<=82))return 'rain';
+  if((c>=71&&c<=77)||c===85||c===86)return 'snow';
+  if(c>=95)return 'storm'; return 'cloud';
+}
+const LABEL={clear:['ئاسمان ساف','ئاسمان ساف'],partly:['کەمێک هەور','کەمێک هەور'],cloud:['هەوراوی','هەوراوی'],fog:['تەمومژاوی','تەمومژاوی'],rain:['بارانی','بارانی'],snow:['بەفراوی','بەفراوی'],storm:['هەورەتریشقە','هەورەتریشقە']};
+function uvLabel(u){return u<3?'کەم':u<6?'مامناوەند':u<8?'بەرز':u<11?'زۆر بەرز':'ڕادەبەدەر'}
+
+/* ---------- ڕێکخستنەکان ---------- */
+const SUNI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">'+SUN+'</svg>';
+const MOONI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">'+MOON+'</svg>';
+const S=Object.assign({mode:null,cal:'solar',pal:'auto'},store.get('settings')||{});
+if(!S.mode)S.mode=store.get('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+const saveS=()=>store.set('settings',S);
+const MODES=[['light','ڕووناک'],['dark','تاریک']];
+const PALS=[['auto','خۆکار (بەپێی وەرز)','#999'],['plain','سادە','#555'],['spring','بەهار','#5aa84f'],['summer','هاوین','#f0a020'],['autumn','پاییز','#d2652a'],['winter','زستان','#4a8fd0']];
+const CALS=[['solar','هەتاوی'],['greg','زایینی'],['hijri','کۆچی مانگی']];
+function applyLook(){
+  const r=document.documentElement,pal=S.pal==='auto'?season():S.pal;
+  if(pal==='plain')r.removeAttribute('data-pal');else r.dataset.pal=pal;
+  r.dataset.theme=S.mode;
+  $('#btnTheme').innerHTML=S.mode==='dark'?MOONI:SUNI;
+  document.querySelector('meta[name=theme-color]').content=getComputedStyle(r).getPropertyValue('--bg').trim()||'#ebebeb';
+  document.querySelector('meta[name=apple-mobile-web-app-status-bar-style]').content=S.mode==='dark'?'black-translucent':'default';
+}
+function renderSettings(){
+  const btn=(key,list,withDot)=>list.map(o=>'<button class="opt'+(S[key]===o[0]?' on':'')+'" data-k="'+o[0]+'">'+(withDot?'<i style="background:'+o[2]+'"></i>':'')+o[1]+'</button>').join('');
+  $('#setMode').innerHTML=btn('mode',MODES);
+  $('#setPal').innerHTML=btn('pal',PALS,true);
+  $('#setCal').innerHTML=btn('cal',CALS);
+}
+function bindOpts(id,key){
+  $(id).onclick=e=>{
+    const b=e.target.closest('.opt');if(!b)return;
+    S[key]=b.dataset.k;saveS();applyLook();renderSettings();
+    if(key==='cal'&&lastData)draw(lastData);
+  };
+}
+bindOpts('#setMode','mode');bindOpts('#setPal','pal');bindOpts('#setCal','cal');
+const setSheet=$('#settings');
+$('#btnSettings').onclick=()=>{renderSettings();setSheet.classList.add('open');setSheet.setAttribute('aria-hidden','false')};
+$('#btnCloseSet').onclick=()=>{setSheet.classList.remove('open');setSheet.setAttribute('aria-hidden','true')};
+$('#btnTheme').onclick=()=>{S.mode=S.mode==='dark'?'light':'dark';saveS();applyLook();renderSettings()};
+applyLook();
+
+/* ---------- weather ---------- */
+let cur=store.get('city')||PRESETS[0];
+async function load(city){
+  cur=city;store.set('city',{n:city.n,lat:city.lat,lon:city.lon});
+  $('#city').textContent=city.n;
+  const app=$('#app');app.classList.add('loading');$('#err').hidden=true;
+  try{
+    const u='https://api.open-meteo.com/v1/forecast?latitude='+city.lat+'&longitude='+city.lon+
+      '&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m'+
+      '&hourly=temperature_2m,weather_code,is_day,visibility'+
+      '&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max'+
+      '&timezone=auto&forecast_days=11&wind_speed_unit=kmh';
+    const r=await fetch(u);if(!r.ok)throw 0;
+    draw(await r.json());
+  }catch(e){$('#err').hidden=false}
+  app.classList.remove('loading');
+}
+let lastData=null;
+function draw(d){
+  lastData=d;
+  const c=d.current,hr=d.hourly,dl=d.daily;
+  const [y,m,dd]=c.time.slice(0,10).split('-').map(Number);
+  const fh=fmtDate(y,m,dd);
+  $('#date').textContent=fd(fh.d)+' '+fh.m+' '+fd(fh.y);
+  const wd=DAYS[new Date(y,m-1,dd).getDay()];
+  $('#temp').innerHTML=T(c.temperature_2m)+'<span class="deg">°</span>';
+  const ck=kindOf(c.weather_code);
+  $('#cond').innerHTML='<b>'+wd+'</b> · '+LABEL[ck][0];
+  let i0=hr.time.findIndex(t=>t.startsWith(c.time.slice(0,13)));if(i0<0)i0=0;
+  let h='';
+  for(let k=0;k<24&&i0+k<hr.time.length;k++){
+    const i=i0+k,code=k===0?c.weather_code:hr.weather_code[i],day=k===0?c.is_day:hr.is_day[i];
+    h+='<div class="h"><span class="t">'+(k===0?'ئێستا':fd(hr.time[i].slice(11,16)))+'</span>'+icon(kindOf(code),day)+'<b>'+T(hr.temperature_2m[i])+'°</b></div>';
+  }
+  $('#hours').innerHTML=h;
+  $('#sunrise').innerHTML='<span class="ltr">'+fd(dl.sunrise[0].slice(11,16))+'</span>';
+  $('#sunset').innerHTML='<span class="ltr">'+fd(dl.sunset[0].slice(11,16))+'</span>';
+  $('#feels').innerHTML='<span class="ltr">'+T(c.apparent_temperature)+'°</span>';
+  $('#wind').innerHTML='<span class="ltr">'+fd(Math.round(c.wind_speed_10m))+' km/h</span><small>'+DIRS[Math.round(c.wind_direction_10m/45)%8]+'</small>';
+  $('#hum').textContent=fd(Math.round(c.relative_humidity_2m))+'٪';
+  $('#pres').innerHTML='<span class="ltr">'+fd(Math.round(c.surface_pressure))+' hPa</span>';
+  const vis=hr.visibility&&hr.visibility[i0]!=null?Math.round(hr.visibility[i0]/1000):null;
+  $('#vis').innerHTML=vis==null?'—':'<span class="ltr">'+fd(vis)+' km</span>';
+  const uv=Math.round(dl.uv_index_max[0]||0);
+  $('#uv').textContent=fd(uv)+' '+uvLabel(uv);
+  let ds='';
+  for(let i=1;i<dl.time.length&&i<=10;i++){
+    const [yy,mm,d2]=dl.time[i].split('-').map(Number);
+    const f=fmtDate(yy,mm,d2);
+    ds+='<div class="d"><div class="w">'+DAYS[new Date(yy,mm-1,d2).getDay()]+'</div><div class="t">'+fd(f.d)+' '+f.m+'</div><b>'+T(dl.temperature_2m_min[i])+'°/'+T(dl.temperature_2m_max[i])+'°</b></div>';
+  }
+  $('#days').innerHTML=ds;
+}
+
+/* ---------- search ---------- */
+const sheet=$('#sheet'),q=$('#q'),res=$('#res');
+const norm=s=>String(s).toLowerCase().replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[ەه]/g,'ه').replace(/[ێ]/g,'ی').replace(/[ۆ]/g,'و').replace(/[\u064B-\u065F\u200c]/g,'').trim();
+function openSheet(){sheet.classList.add('open');sheet.setAttribute('aria-hidden','false');setTimeout(()=>q.focus(),250)}
+function closeSheet(){sheet.classList.remove('open');sheet.setAttribute('aria-hidden','true');q.blur()}
+function pick(c){closeSheet();q.value='';res.innerHTML='';load(c)}
+$('#btnSearch').onclick=openSheet;
+$('#btnClose').onclick=closeSheet;
+$('#btnLoc').onclick=()=>{
+  if(!navigator.geolocation){res.innerHTML='<div class="empty">ئامێرەکەت پشتگیری شوێن ناکات.</div>';return}
+  res.innerHTML='<div class="empty">…</div>';
+  navigator.geolocation.getCurrentPosition(p=>pick({n:'شوێنی من',lat:p.coords.latitude,lon:p.coords.longitude}),()=>{res.innerHTML='<div class="empty">ڕێگەپێدان بە شوێن نەدرا.</div>'},{timeout:10000});
+};
+(function(){
+  let h='';
+  for(const g of Object.keys(GROUPS)){
+    h+='<div class="gt">'+GROUPS[g][0]+'</div><div class="chips">'+PRESETS.filter(p=>p.g===g).map(p=>'<button class="chip" data-n="'+p.n+'">'+p.n+'</button>').join('')+'</div>';
+  }
+  $('#groups').innerHTML=h;
+  $('#groups').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;pick(PRESETS.find(p=>p.n===b.dataset.n))};
+})();
+let timer,seq=0,found=[];
+function showResults(list,msg){
+  found=list;
+  res.innerHTML=list.length?list.map((c,i)=>'<button class="item" data-i="'+i+'"><span>'+c.n+'</span><small>'+(c.sub||'')+'</small></button>').join(''):(msg?'<div class="empty">'+msg+'</div>':'');
+}
+res.onclick=e=>{const b=e.target.closest('.item');if(b)pick(found[+b.dataset.i])};
+q.addEventListener('input',()=>{
+  clearTimeout(timer);
+  const v=q.value.trim();
+  if(!v){res.innerHTML='';return}
+  const nv=norm(v);
+  const local=PRESETS.filter(p=>norm(p.n).includes(nv)||p.en.toLowerCase().includes(nv)).map(p=>({...p,sub:GROUPS[p.g][0].split(' · ')[1]}));
+  showResults(local);
+  if(v.length<2)return;
+  const my=++seq;
+  timer=setTimeout(async()=>{
+    try{
+      const r=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(v)+'&count=20&language=en&format=json');
+      const d=await r.json();
+      if(my!==seq)return;
+      const extra=(d.results||[]).filter(x=>CC[x.country_code]).filter(x=>!local.some(l=>Math.abs(l.lat-x.latitude)<.15&&Math.abs(l.lon-x.longitude)<.15))
+        .map(x=>({n:x.name,lat:x.latitude,lon:x.longitude,sub:[x.admin1,CC[x.country_code]].filter(Boolean).join('، ')}));
+      const all=local.concat(extra);
+      showResults(all,'هیچ شارێک نەدۆزرایەوە');
+    }catch(e){if(my===seq)showResults(local,local.length?'':'پەیوەندی بە ئینتەرنێتەوە نییە')}
+  },350);
+});
+q.addEventListener('keydown',e=>{if(e.key==='Enter'&&found.length)pick(found[0])});
+
+load(cur);
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
