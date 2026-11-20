@@ -43,6 +43,8 @@ cp node_modules/vazirmatn/fonts/webfonts/Vazirmatn\[wght\].woff2 fonts/Vazirmatn
 
 ئەپەکە خۆی ئەو فایلە بەکاردەهێنێت ئەگەر هەبێت.
 
+![](https://github.com/linux-krd/kurdish-weather-app/blob/main/ubuntu-weather.jpg)
+
 ## پێکهاتەی فایلەکان
 
 ```
